@@ -13,6 +13,10 @@
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
 
+        <!-- Web Fonts -->
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+
         <!-- Vendor CSS -->
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap.min.css" />
         <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.4/css/bootstrap-theme.min.css" />
@@ -27,20 +31,30 @@
         <link rel="stylesheet" href="css/zika_tacc.css" />
         
     </head>
-    <body>
+    <body class="gfont-open-sans">
         <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                <h4>Zika Hackathon @ TACC September 9, 2016</h4>
-                <h2>Zika Data Map</h2>
+                    <div class="event-title">Zika Hackathon @ TACC September 9, 2016</div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-xs-12">
-                    <div id="zikamap"></div>
+                <div class="col-xs-8">
+                    <div class="map-title gfont-oswald">Zika Map</div>
+                    <div class="map-description">
+                        <p>This map describes...</p>
+                    </div>
+                    <div id="zikamap" class="zika-display"></div>
+                </div>
+                <div class="col-xs-4">
+                    <div class="graph-title gfont-oswald">Zika Data</div>
+                    <div class="graph-description">
+                        <p>This graph describes...</p>
+                    </div>
+                    <div id="zikadata" class="zika-display"></div>
                 </div>
             </div>
         </div>
@@ -63,7 +77,7 @@
           <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
           <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
         <![endif]-->
-        
+
         <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
         <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.12.0.min.js"><\/script>')</script>
         <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script> -->
@@ -74,17 +88,23 @@
         <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-geo-projection/0.2.15/d3.geo.projection.min.js"></script>
         <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script> -->
+        <script src="http://d3js.org/topojson.v1.min.js"></script>
 
         <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script> -->
-
+        <!--
         <script src="//cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
-        <!-- <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script> -->
+         -->
+         <script src="https://unpkg.com/leaflet@1.0.0-rc.3/dist/leaflet.js"></script>
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.0.0/leaflet.ajax.min.js"></script>
 
         <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
         <!-- <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script> -->
         
         <!-- Custom Scripts -->
+        <script>console.log('Zika Hackathon @ TACC on September 9, 2016');</script>
         <script src="js/plugins.js"></script>
-        <script src="js/main.js"></script>
+        <script src="js/maptile_providers.js"></script>
+        <script src="js/map.js"></script>
+        <!-- <script src="js/graph.js"></script> -->
     </body>
 </html>
