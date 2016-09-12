@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Canvas Swarm</title>
+
+<link href="https://fonts.googleapis.com/css?family=Ubuntu" rel="stylesheet">
+<style>
+  html {
+    background: #102;
+    color: #fff;
+  }
+  body {
+    font-family: 'Ubuntu', sans-serif;
+  }
+  canvas {
+    z-index: 100;
+    position: absolute;
+    top: 0;
+    margin: 0 auto;
+    width: 100%;
+  }
+  #fps {
+    z-index: 900;
+    position: absolute;
+    top: 0;
+    width: 10%;
+    padding: 0.5rem 0 0.5rem 2rem;
+    font-size: 2rem;
+    background: #101;
+    border: 1px solid #a0c;
+    opacity: 0.5;
+  }
+  #fps:hover {
+    /*background: rgba(20,0,40,1.0);*/
+    opacity: 1.0;
+  }
+  #fps > span {
+    padding: 0 0 0 1rem;
+    color: #fc0;
+  }
+  .swarm-canvas { }
+</style>
+
+<div id="fps">FPS: <span>?</span></div>
+
+<script src="//d3js.org/d3.v3.min.js"></script>
+<script>
+
+  // D3 code.
+  var data = d3.range(500).map(function() {
+      return {
+          xloc: 0,
+          yloc: 0,
+          xvel: 0,
+          yvel: 0
+      };
+  });
+
+  var width = 1280; //960;
+  var height = 800; //500;
+  var angleBase = 100; //2;
+  var angle = angleBase * Math.PI;
+
+  var x = d3.scale.linear().domain([-5, 5]).range([0, width]);
+  var y = d3.scale.linear().domain([-5, 5]).range([0, height]);
+
+  var time0 = Date.now();
+  var time1;
+
+  var fps = d3.select("#fps span");
+  var canvas = d3.select("body").append("canvas").attr("width", width).attr("height", height).attr("class", "swarm-canvas");;
+
+  var context = canvas.node().getContext("2d");
+  context.fillStyle = '#fc0';   //'#305';  "steelblue";
+  context.strokeStyle = '#a0c'; //"#666";
+  context.strokeWidth = 0.1;    //1.5;
+
+  // swarmSpread Values:
+  // - 0.0001 (micro/horizon) 
+  // - 0.001 (tiny/distant) 
+  // - 0.01 (small/far) 
+  // - 0.04 *default
+  // - 0.05 (large/close) 
+  // - 0.1 (huge/touching) 
+  // - 0.5 (busy/inside)s
+  // - 1.0 (sparse/exiting)
+  var swarmSpreadX = 0.04;
+  var swarmSpreadY = 0.04;
+
+  // swarmPos Values:
+  // 0.0 - 0.4 swarm moves right
+  // 0.5 swarm hovers *default
+  // 0.6 - 1.0 swarm moves left
+  var swarmPosX = 0.5;
+  var swarmPosY = 0.5;
+
+  // swarmExtents Values:
+  // 0.001 <<< larger cluster size, closer | smaller cluster size, distant >>> 1.0
+  // 2.1 (X), 0.01 (Y) creates spreading curtains effect.
+  // Invert these relationships (X[2.1,2.2] && Y[1.0,0.01]) to change burst effect.
+  // - 2.2 (X) will create fast curtains.
+  // - 2.3 (X) will create fast burst effect.
+  // - 2.4-3.0 (X) will create extreme fast bursts.
+  // - anything over 3.0 is no different than 3.0.
+  // - 0.1-0.01 (Y) creates increasing range of vertical spread.
+  // - 0.01-0.001 (Y) creates large ranged vertical spread.
+  // - both at 2.0 creates slowly growing 'soap bubbles'effect.
+  // - both at 2.01-09 creates increasingly faster fly through.
+  // - both at 2.1 creates a fly through effect.
+  var swarmExtentsX = .05; //.05; 2.03;
+  var swarmExtentsY = .05; //.05; 2.03;
+
+  // swarmGrouping Values:
+  // - 1.0 creates super tight grouping.
+  // - 0.0005 creates moderayte swarm grouping *default
+  // - 0.0001 creates loose swarm grouping.
+  var swarmGroupingX = 0.0001; //0.0005;
+  var swarmGroupingY = 0.0001; //0.0005;
+
+  d3.timer(function() {
+      context.clearRect(0, 0, width, height);
+
+      data.forEach(function(d) {
+          d.xloc += d.xvel;
+          d.yloc += d.yvel;
+          d.xvel += swarmSpreadX * (Math.random() - swarmPosX) - swarmExtentsX * d.xvel - swarmGroupingX * d.xloc;
+          d.yvel += swarmSpreadY * (Math.random() - swarmPosY) - swarmExtentsY * d.yvel - swarmGroupingY * d.yloc;
+          context.beginPath();
+          context.arc(x(d.xloc), y(d.yloc), Math.min(1 + 1000 * Math.abs(d.xvel * d.yvel), 10), 0, angle);
+          context.fill();
+          context.stroke();
+      });
+
+      time1 = Date.now();
+      fps.text(Math.round(1000 / (time1 - time0)));
+      time0 = time1;
+  });
+</script>

@@ -32,10 +32,19 @@ var defaultLocation = new L.LatLng(defaultLat, defaultLong);
 var map = L.map('zikamap', {
     center: defaultLocation,
     zoom: defaultZoom,
-    layers: [Esri_WorldImagery]
+    layers: [Thunderforest_Pioneer]
 });
 
-// Control layers.
+// Add data layers.
+var countyLayer = new L.GeoJSON.AJAX(countyData);
+console.log(countyLayer);     
+countyLayer.addTo(map);
+
+var zikaIndexLayer = new L.GeoJSON.AJAX(zikaIndexData);
+console.log(zikaIndexLayer);   
+zikaIndexLayer.addTo(map);
+
+// Layer controls.
 var baseMaps = {
     "OpenStreetMap_Mapnik": OpenStreetMap_Mapnik,
     "OpenStreetMap_BlackAndWhite": OpenStreetMap_BlackAndWhite,
@@ -62,12 +71,3 @@ var overlayMaps = {
 
 // Add controls to map.
 L.control.layers(baseMaps, overlayMaps).addTo(map);
-
-// Add data layers.
-var countyLayer = new L.GeoJSON.AJAX(countyData);
-console.log(countyLayer);     
-countyLayer.addTo(map);
-
-var zikaIndexLayer = new L.GeoJSON.AJAX(zikaIndexData);
-console.log(zikaIndexLayer);   
-zikaIndexLayer.addTo(map);
